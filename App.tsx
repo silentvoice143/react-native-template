@@ -13,17 +13,42 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+  asyncStoragePersister,
+  queryClient,
+} from './src/services/query-client';
+import StoreProvider from './src/store/store-provider';
+import { Fonts } from './src/theme/fonts';
 
 function App() {
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
-        <Text>hello</Text>
-      </View>
+      <StoreProvider>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{ persister: asyncStoragePersister }}
+        >
+          <View style={{ padding: 20 }}>
+            <Text style={{ fontFamily: Fonts.inter.regular, fontSize: 18 }}>
+              Inter Regular
+            </Text>
+            <Text style={{ fontFamily: Fonts.inter.bold, fontSize: 18 }}>
+              Inter Bold
+            </Text>
+            <Text style={{ fontFamily: Fonts.garamond.regular, fontSize: 18 }}>
+              Garamond Regular
+            </Text>
+            <Text
+              style={{ fontFamily: Fonts.garamond.extraBold, fontSize: 18 }}
+            >
+              Garamond ExtraBold
+            </Text>
+          </View>
+        </PersistQueryClientProvider>
+      </StoreProvider>
     </SafeAreaProvider>
   );
 }
